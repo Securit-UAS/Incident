@@ -1,38 +1,47 @@
-# Securit Incident Dashboard — V0.1
+# Securit Incident Dashboard — V0.2
 
-GitHub-ready static incident dashboard using the same authentication flows and localStorage session key as the Securit Training Compliance dashboard.
+GitHub-ready static build, based on the Securit Training Compliance dashboard authentication and visual language.
+
+## V0.2 changes
+- Jotform Submission ID is now the visible Incident Ref; SharePoint row IDs are kept internal only.
+- Approved PDFs are detected from SharePoint `{HasAttachments}` and linked using the standard attachment path `<jotformID>.pdf`.
+- Incident detail shows Talos AI Overview, formatted AI Statement, and the original officer statement.
+- `Tester McTest` records are clearly marked as TEST — IGNORE, remain visible, and are excluded from KPIs/charts.
+- Client is inferred from the site name using the agreed client-prefix rules.
+- Manager field supports an Estate DB site map if the API payload also returns a `sites` array containing `siteName` and `managerName` or `managerEmail`.
+- Loading progress is tuned around the current ~20 second live-flow response time.
+- PDF status clearly shows `No PDF has been generated` where an attachment is absent.
+- PDF Open and Download controls are available where an approved PDF is attached.
+
+## Current incident API response
+The page continues to accept the current raw SharePoint array/body response.
+
+For Estate DB manager matching, the preferred future response shape is:
+
+```json
+{
+  "incidents": [ ...incident SharePoint rows... ],
+  "sites": [
+    {
+      "siteName": "OHS Harelaw Industrial Estate Durham",
+      "managerName": "Karl Taylor"
+    }
+  ]
+}
+```
+
+`managerEmail` can be returned instead of `managerName`; the page will convert it to a display name.
+
+## PDF behaviour
+Production PDFs are attached to the incident SharePoint row with the filename `<Jotform Submission ID>.pdf`.
+The page constructs the standard SharePoint attachment URL from:
+- SharePoint item ID (internal)
+- `jotformID`
+- `{HasAttachments}`
+
+Users may be asked to authenticate to Microsoft 365 when opening the SharePoint PDF.
 
 ## Files
-- `index.html`
-- `config.js`
-- `securit-logo.png`
-
-## Current behaviour
-- Reuses the same login / PIN change / session validation flows as Training Compliance.
-- Reuses the same localStorage key (`securitTrainingAuthV1`) so a valid browser session can carry across between the two dashboards.
-- Loads the current incident Power Automate endpoint.
-- Supports 30/14/7/1-day client-side period filtering.
-- Filters by site, client, manager, incident type and subtype.
-- Search across ref, site, officer, client, manager, type, subtype and statement.
-- KPI cards and simple top-type / top-site summaries.
-- Full incident detail dialog.
-- Jotform PDF button appears automatically if the API later provides `pdfUrl`, `PDFUrl`, `jotformPdfUrl` or `JotformPDF`.
-
-## Data fields currently mapped
-Raw SharePoint fields supported:
-- `ID` -> incident ref
-- `field_6` -> site
-- `field_5` -> officer
-- `field_7` -> incident date/time
-- `field_8` -> incident type
-- `field_15` -> statement
-- `SITEWORK` -> subtype
-- `Created` -> created timestamp
-
-Optional enriched fields supported if added to the flow later:
-- `client` / `Client` / `clientName`
-- `manager` / `Manager` / `managerName`
-- `pdfUrl` / `PDFUrl` / `jotformPdfUrl` / `JotformPDF`
-
-## Important
-`config.js` currently contains signed Power Automate URLs. Treat it as a test/internal build and rotate signed endpoints before any broader production deployment.
+- index.html
+- config.js
+- securit-logo.png
