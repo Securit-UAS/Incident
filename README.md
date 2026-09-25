@@ -1,4 +1,4 @@
-# Securit Incident Dashboard — V0.2
+# Securit Incident Dashboard — V0.3
 
 GitHub-ready static build, based on the Securit Training Compliance dashboard authentication and visual language.
 
@@ -45,3 +45,13 @@ Users may be asked to authenticate to Microsoft 365 when opening the SharePoint 
 - index.html
 - config.js
 - securit-logo.png
+
+
+## V0.3
+- Supports the actual Power Automate response wrapper: `body.incidents` and `body.sites.body`.
+- Manager names are generated from `managerEmail` where needed.
+  - `karl.taylor@securit.email` → `Karl Taylor`
+  - `darrell.sloan@securit.email` → `Darrell Sloan`
+- Talos CMS site matching is authoritative for manager assignment.
+- Historical site-name variations get a conservative fallback after exact matching.
+- Expanded client mapping for confirmed current and legacy clients, including typo variants.

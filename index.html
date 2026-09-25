@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <title>Securit Incident Dashboard V0.2</title>
+  <title>Securit Incident Dashboard V0.3</title>
   <style>
     :root{
       --bg:#f4f6f8;--panel:#ffffff;--panel2:#f8fafc;--line:#d9e0e7;--text:#1d2733;--muted:#687687;
@@ -44,7 +44,7 @@
 <div class="loading-overlay hidden" id="loadingOverlay"><section class="loading-card"><img src="securit-logo.png" alt="Securit" class="loading-logo"><h2>Loading incident data…</h2><p id="loadingText" style="color:var(--muted)">Please wait while the live incident register is loaded.</p><div class="loading-progress"><div class="loading-bar" id="loadingBar"></div></div><div class="loading-meta"><span id="loadingStage">Initialising secure session</span><span class="loading-percent" id="loadingPercent">0%</span></div></section></div>
 
 <div class="shell" id="appShell">
-  <header class="topbar"><div class="brand"><img src="securit-logo.png" alt="Securit"><div><h1>Incident Dashboard</h1><p>Securit live incident intelligence · V0.2</p></div></div><div class="userbar"><div class="who"><strong id="signedInName">Signed in</strong><span id="signedInEmail"></span></div><button class="btn secondary" id="logoutBtn" type="button">Sign out</button><button class="btn ghost" id="refreshBtn" type="button">Refresh</button><div class="sync"><span class="sync-dot" id="syncDot"></span><span id="syncText">Waiting for authentication…</span></div></div></header>
+  <header class="topbar"><div class="brand"><img src="securit-logo.png" alt="Securit"><div><h1>Incident Dashboard</h1><p>Securit live incident intelligence · V0.3</p></div></div><div class="userbar"><div class="who"><strong id="signedInName">Signed in</strong><span id="signedInEmail"></span></div><button class="btn secondary" id="logoutBtn" type="button">Sign out</button><button class="btn ghost" id="refreshBtn" type="button">Refresh</button><div class="sync"><span class="sync-dot" id="syncDot"></span><span id="syncText">Waiting for authentication…</span></div></div></header>
 
   <section class="hero"><article class="card intro"><span class="eyebrow">Operations dashboard</span><h2>Incident visibility without the noise</h2><p>Live operational reporting from the last 30 days. End-of-shift reports are excluded, test submissions remain visible but are removed from statistics, and approved Jotform PDFs can be opened directly from the incident record.</p></article><article class="card searchbox"><label for="searchInput">Search incidents</label><div class="searchrow"><input id="searchInput" autocomplete="off" placeholder="Site, officer, statement or Jotform ref"><button class="btn primary" id="searchBtn">Search</button></div></article></section>
 
@@ -53,7 +53,7 @@
       <article class="card stat"><span>Last 24h</span><strong id="stat24h">—</strong><small>Operational reports</small></article>
       <article class="card stat"><span>Sites</span><strong id="statSites">—</strong><small>Unique locations</small></article>
       <article class="card stat"><span>Clients</span><strong id="statClients">—</strong><small>Mapped from site</small></article>
-      <article class="card stat"><span>Managers</span><strong id="statManagers">—</strong><small>Estate DB match</small></article>
+      <article class="card stat"><span>Managers</span><strong id="statManagers">—</strong><small>Matched from Talos CMS</small></article>
       <article class="card stat"><span>PDFs available</span><strong id="statPdf">—</strong><small>Approved reports</small></article>
     </section>
 
@@ -128,12 +128,37 @@ const AUTH_STORAGE_KEY="securitTrainingAuthV1"; // deliberately shared with Trai
 const SHAREPOINT_SITE_ROOT="https://securitgroup.sharepoint.com/sites/AllGuarding";
 const INCIDENT_LIST_ATTACHMENT_PATH="Lists/Static  Commercial Security Incident Log/Attachments";
 const CLIENT_RULES=[
-  [/^ohs\b/i,"OHS"],[/^cable properties\b/i,"Cable Properties"],[/^h&mv\b/i,"H&MV Engineering"],
-  [/^tarmac\b/i,"Tarmac"],[/^mclaren\b/i,"McLaren"],[/^glencar\b/i,"Glencar"],
-  [/^redrow/i,"Redrow Homes"],[/^harron homes\b/i,"Harron Homes"],[/^bellway\b/i,"Bellway"],
-  [/^apollo\b/i,"Apollo"],[/^mj evans\b/i,"MJ Evans"],[/^pinewood lodge\b/i,"Pinewood Lodge"],
-  [/^muji\b/i,"MUJI"],[/^four marketing\b/i,"Four Marketing"],[/^bandai\b/i,"Bandai"],
-  [/^taylor wimpey\b/i,"Taylor Wimpey"],[/^evri\b/i,"Evri"],[/pj livesey holdings/i,"PJ Livesey Holdings Ltd"]
+  [/^avant homes\b/i,"Avant Homes"],
+  [/^cable properties\b/i,"Cable Properties"],
+  [/^cleveland cables\b/i,"Cleveland Cables"],
+  [/^compass group\b/i,"Compass Group"],
+  [/^dwh\b/i,"David Wilson Homes"],
+  [/^evri\b/i,"Evri"],
+  [/^glencar\b/i,"Glencar"],
+  [/^h&mv\b/i,"H&MV Engineering"],
+  [/^thone mash hmv\b/i,"H&MV Engineering"],
+  [/^harron homes\b/i,"Harron Homes"],
+  [/^hoober urban partnership\b/i,"Hoober Urban Partnership"],
+  [/^mclaren\b/i,"McLaren"],
+  [/^mclaran\b/i,"McLaren"],
+  [/^muji\b/i,"MUJI"],
+  [/^ocs fm\b/i,"OCS"],
+  [/^ohs\b/i,"OHS"],
+  [/^omexom\b/i,"Omexom"],
+  [/^pinewood lodge\b/i,"Pinewood Lodge"],
+  [/^r blue regen\b/i,"R Blue Regen"],
+  [/^redro\b/i,"Redrow Homes"],
+  [/^redrow\b/i,"Redrow Homes"],
+  [/^stoneacre\b/i,"Stoneacre"],
+  [/^taramc\b/i,"Tarmac"],
+  [/^tramac\b/i,"Tarmac"],
+  [/^tarmac\b/i,"Tarmac"],
+  [/^taylor wimpney\b/i,"Taylor Wimpey"],
+  [/^taylor wimpey\b/i,"Taylor Wimpey"],
+  [/^thames water\b/i,"Thames Water"],
+  [/pj livesey holdings/i,"PJ Livesey Holdings Ltd"],
+  [/^four marketing\b/i,"Four Marketing"],
+  [/^bandai\b/i,"Bandai"]
 ];
 const LOADING_MESSAGES=[
   "Validating secure session","Connecting to the live incident register","Reading the last 30 days",
@@ -164,19 +189,68 @@ function buildPdfUrl(x){
   return `${SHAREPOINT_SITE_ROOT}/${path}`;
 }
 
-function managerDisplay(value){const v=normaliseSpace(value);if(!v)return "";if(!v.includes("@"))return v;const local=v.split("@")[0].replace(/[._-]+/g," ");return local.replace(/\b\w/g,c=>c.toUpperCase())}
+function titleCaseName(value){
+  return normaliseSpace(value)
+    .split(" ")
+    .filter(Boolean)
+    .map(part=>{
+      if(/^[A-Z]{2,4}$/.test(part)) return part;
+      if(/^mc[a-z]/i.test(part)) return "Mc"+part.slice(2,3).toUpperCase()+part.slice(3).toLowerCase();
+      return part.charAt(0).toUpperCase()+part.slice(1).toLowerCase();
+    })
+    .join(" ");
+}
+function managerDisplay(value){
+  const v=normaliseSpace(value);
+  if(!v)return "";
+  if(!v.includes("@"))return titleCaseName(v);
+  const local=v.split("@")[0]
+    .replace(/\+.*$/,"")
+    .replace(/[._-]+/g," ")
+    .replace(/\d+/g," ");
+  return titleCaseName(local);
+}
+function getApiRoot(payload){
+  if(payload && typeof payload==="object" && payload.body && !Array.isArray(payload.body)) return payload.body;
+  return payload ?? {};
+}
 function buildSiteManagerMap(payload){
   siteManagerMap=new Map();
-  const sites=Array.isArray(payload?.sites)?payload.sites:[];
+  const root=getApiRoot(payload);
+  const siteContainer=root?.sites;
+  const sites=
+    Array.isArray(siteContainer) ? siteContainer :
+    Array.isArray(siteContainer?.body) ? siteContainer.body :
+    Array.isArray(siteContainer?.value) ? siteContainer.value :
+    [];
   for(const s of sites){
     const site=normaliseSpace(s.siteName??s.site??s.Title??s.name);
     const manager=managerDisplay(s.managerName??s.manager??s.managerEmail??s.Manager);
     if(site&&manager)siteManagerMap.set(normaliseKey(site),manager);
   }
 }
+function getManagerForSite(site){
+  const key=normaliseKey(site);
+  if(!key)return "";
+  if(siteManagerMap.has(key))return siteManagerMap.get(key);
+
+  const compact=key.replace(/[^a-z0-9]/g,"");
+  let best="";
+  let bestScore=0;
+  for(const [cmsKey,manager] of siteManagerMap.entries()){
+    const cmsCompact=cmsKey.replace(/[^a-z0-9]/g,"");
+    if(!cmsCompact)continue;
+    if(compact===cmsCompact)return manager;
+    if(compact.includes(cmsCompact)||cmsCompact.includes(compact)){
+      const score=Math.min(compact.length,cmsCompact.length)/Math.max(compact.length,cmsCompact.length);
+      if(score>bestScore){bestScore=score;best=manager}
+    }
+  }
+  return bestScore>=0.72?best:"";
+}
 function normaliseRecord(r){
   const site=normaliseSpace(r.site??r.field_6);
-  const manager=managerDisplay(r.manager??r.Manager??r.managerName??siteManagerMap.get(normaliseKey(site))??"");
+  const manager=managerDisplay(r.manager??r.Manager??r.managerName??getManagerForSite(site)??"");
   const jotformId=normaliseSpace(r.jotformID??r.jotformId??r.JotformID??r.submissionId??r.SubmissionID);
   const hasAttachments=boolValue(r.hasAttachments??r.HasAttachments??r["{HasAttachments}"]);
   return {
@@ -198,7 +272,14 @@ function normaliseRecord(r){
     isTest:isTestOfficer(r.officer??r.field_5)
   };
 }
-function extractRecords(payload){if(Array.isArray(payload))return payload;if(Array.isArray(payload?.value))return payload.value;if(Array.isArray(payload?.body?.value))return payload.body.value;if(Array.isArray(payload?.incidents))return payload.incidents;return []}
+function extractRecords(payload){
+  const root=getApiRoot(payload);
+  if(Array.isArray(root))return root;
+  if(Array.isArray(root?.incidents))return root.incidents;
+  if(Array.isArray(root?.value))return root.value;
+  if(Array.isArray(root?.body?.value))return root.body.value;
+  return [];
+}
 function uniqueSorted(values){return [...new Set(values.map(normaliseSpace).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"en-GB"))}
 function populateSelect(id,values,allLabel){const s=el(id),current=s.value;const list=uniqueSorted(values);s.innerHTML=`<option value="all">${escapeHtml(allLabel)}</option>`+list.map(v=>`<option value="${escapeHtml(normaliseKey(v))}">${escapeHtml(v)}</option>`).join("");if([...s.options].some(o=>o.value===current))s.value=current}
 function populateFilters(){populateSelect("siteFilter",incidents.map(x=>x.site),"All sites");populateSelect("clientFilter",incidents.map(x=>x.client),"All clients");populateSelect("managerFilter",incidents.map(x=>x.manager),"All managers");populateSelect("typeFilter",incidents.map(x=>x.incidentType),"All types");populateSelect("subTypeFilter",incidents.map(x=>x.subType),"All subtypes")}
