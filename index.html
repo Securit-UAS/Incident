@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <title>Securit Incident Dashboard V0.3</title>
+  <title>Securit Incident Dashboard V0.4</title>
   <style>
     :root{
       --bg:#f4f6f8;--panel:#ffffff;--panel2:#f8fafc;--line:#d9e0e7;--text:#1d2733;--muted:#687687;
@@ -32,7 +32,59 @@
     .statementbox{min-height:64px}.pdf-panel{margin-top:20px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#f8fafc;display:flex;align-items:center;justify-content:space-between;gap:16px}.pdf-panel strong{display:block;margin-top:6px}.pdf-panel p{margin:5px 0 0}.pdf-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.refmono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.78rem}
 
     @media(max-width:1100px){.filtergrid{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:780px){.pdf-panel{align-items:flex-start;flex-direction:column}.pdf-actions{justify-content:flex-start}.shell{padding:13px}.topbar{align-items:flex-start;flex-direction:column}.hero,.insights{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.filtergrid{grid-template-columns:1fr 1fr}.meta-grid{grid-template-columns:1fr}.brand img{height:48px}.userbar{justify-content:flex-start}.searchrow{flex-direction:column}.barrow{grid-template-columns:1fr auto}.bartrack{grid-column:1 / -1}.hide-mobile{display:none}}
+
+    .shell{max-width:1480px;padding:18px 20px 28px}
+    .topbar{margin-bottom:14px}
+    .brand{gap:14px}.brand img{height:52px}.brand h1{font-size:1.45rem}.brand p{font-size:.88rem}
+    .userbar .who strong{font-size:1rem}
+    .btn{border-radius:12px;padding:10px 14px}
+    .hero{display:none}
+    .controlbar{display:grid;grid-template-columns:minmax(320px,1.2fr) minmax(260px,.8fr);gap:12px;margin-bottom:12px;padding:16px 18px;align-items:end}
+    .controlcopy h2{margin:4px 0 4px;font-size:1.35rem;letter-spacing:-.03em}
+    .controlcopy p{margin:0;color:var(--muted);line-height:1.45;font-size:.92rem}
+    .searchbox{padding:0;background:transparent;border:none;box-shadow:none}
+    .searchbox label{display:block;margin-bottom:6px}
+    .searchrow{margin-top:0}
+    .searchrow input{padding:13px 14px}
+    .stats{grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 12px}
+    .stat{padding:14px 16px;box-shadow:none}
+    .stat strong{font-size:1.7rem}
+    .stat small{font-size:.8rem}
+    .filters{padding:14px 16px;margin-bottom:12px}
+    .filtergrid{grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px}
+    .resultline{margin-top:10px;font-size:.85rem}
+    .overview-toggle{margin:0 0 12px}
+    .overview-panel{overflow:hidden}
+    .overview-panel summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+    .overview-panel summary::-webkit-details-marker{display:none}
+    .overview-title{display:flex;flex-direction:column;gap:4px}.overview-title strong{font-size:1rem}.overview-title span{font-size:.84rem;color:var(--muted)}
+    .overview-chevron{color:var(--navy);font-weight:900;transition:transform .2s ease}
+    .overview-panel[open] .overview-chevron{transform:rotate(180deg)}
+    .insights{margin:0;padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .insight{padding:16px;box-shadow:none}
+    .insight h3{font-size:.98rem;margin-bottom:10px}
+    .barrow{font-size:.8rem}
+    .tablewrap{border-radius:18px}
+    table{min-width:1080px}
+    th,td{padding:10px 10px}
+    tbody tr:hover{background:#f8fafc}
+    .incident-title{font-size:1rem;line-height:1.1}
+    .sub{font-size:.72rem}
+    .statement{max-width:420px;font-size:.84rem;color:#304051}
+    .typepill{padding:4px 8px;font-size:.69rem}
+    .pdf-pill{font-size:.68rem;padding:4px 8px}
+    .detailsbtn{font-weight:800}
+    .test-row,.crime-row,.warn-row{background-clip:padding-box}
+    .test-row{background:repeating-linear-gradient(135deg,#fafafa,#fafafa 12px,#f2f4f6 12px,#f2f4f6 24px)!important}
+    .crime-row{background:repeating-linear-gradient(135deg,#fff8f8,#fff8f8 12px,#fff1f1 12px,#fff1f1 24px)!important}
+    .warn-row{background:repeating-linear-gradient(135deg,#fffdf3,#fffdf3 12px,#fff7d8 12px,#fff7d8 24px)!important}
+    .test-badge{background:#2b3138;color:#fff;border-color:#2b3138}
+    .crime-badge,.warn-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-weight:900;font-size:.68rem;letter-spacing:.06em;margin-top:5px}
+    .crime-badge{background:#fff0f0;border:1px solid #efc1c1;color:#9b3232}
+    .warn-badge{background:#fff7df;border:1px solid #efd48a;color:#8c6500}
+    .meta-grid{grid-template-columns:repeat(4,1fr)}
+
+    @media(max-width:780px){.pdf-panel{align-items:flex-start;flex-direction:column}.pdf-actions{justify-content:flex-start}.shell{padding:13px}.topbar{align-items:flex-start;flex-direction:column}.controlbar,.insights{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.filtergrid{grid-template-columns:1fr 1fr}.meta-grid{grid-template-columns:1fr}.brand img{height:48px}.userbar{justify-content:flex-start}.searchrow{flex-direction:column}.barrow{grid-template-columns:1fr auto}.bartrack{grid-column:1 / -1}.hide-mobile{display:none}}
     @media(max-width:520px){.filtergrid,.stats{grid-template-columns:1fr}}
   </style>
 </head>
@@ -44,16 +96,24 @@
 <div class="loading-overlay hidden" id="loadingOverlay"><section class="loading-card"><img src="securit-logo.png" alt="Securit" class="loading-logo"><h2>Loading incident data…</h2><p id="loadingText" style="color:var(--muted)">Please wait while the live incident register is loaded.</p><div class="loading-progress"><div class="loading-bar" id="loadingBar"></div></div><div class="loading-meta"><span id="loadingStage">Initialising secure session</span><span class="loading-percent" id="loadingPercent">0%</span></div></section></div>
 
 <div class="shell" id="appShell">
-  <header class="topbar"><div class="brand"><img src="securit-logo.png" alt="Securit"><div><h1>Incident Dashboard</h1><p>Securit live incident intelligence · V0.3</p></div></div><div class="userbar"><div class="who"><strong id="signedInName">Signed in</strong><span id="signedInEmail"></span></div><button class="btn secondary" id="logoutBtn" type="button">Sign out</button><button class="btn ghost" id="refreshBtn" type="button">Refresh</button><div class="sync"><span class="sync-dot" id="syncDot"></span><span id="syncText">Waiting for authentication…</span></div></div></header>
+  <header class="topbar"><div class="brand"><img src="securit-logo.png" alt="Securit"><div><h1>Incident Dashboard</h1><p>Securit live incident intelligence · V0.4</p></div></div><div class="userbar"><div class="who"><strong id="signedInName">Signed in</strong><span id="signedInEmail"></span></div><button class="btn secondary" id="logoutBtn" type="button">Sign out</button><button class="btn ghost" id="refreshBtn" type="button">Refresh</button><div class="sync"><span class="sync-dot" id="syncDot"></span><span id="syncText">Waiting for authentication…</span></div></div></header>
 
-  <section class="hero"><article class="card intro"><span class="eyebrow">Operations dashboard</span><h2>Incident visibility without the noise</h2><p>Live operational reporting from the last 30 days. End-of-shift reports are excluded, test submissions remain visible but are removed from statistics, and approved Jotform PDFs can be opened directly from the incident record.</p></article><article class="card searchbox"><label for="searchInput">Search incidents</label><div class="searchrow"><input id="searchInput" autocomplete="off" placeholder="Site, officer, statement or Jotform ref"><button class="btn primary" id="searchBtn">Search</button></div></article></section>
+  <section class="card controlbar">
+    <article class="controlcopy">
+      <span class="eyebrow">Operations dashboard</span>
+      <h2>Operational incident register</h2>
+      <p>Live reporting with test submissions kept visible, PDFs linked where approved, and filters focused on helping managers get to the incident list quickly.</p>
+    </article>
+    <article class="searchbox">
+      <label for="searchInput">Search incidents</label>
+      <div class="searchrow"><input id="searchInput" autocomplete="off" placeholder="Site, officer, statement or Jotform ref"><button class="btn primary" id="searchBtn">Search</button></div>
+    </article>
+  </section>
 
   <section class="stats">
       <article class="card stat"><span>Operational reports</span><strong id="statTotal">—</strong><small>Tests excluded</small></article>
       <article class="card stat"><span>Last 24h</span><strong id="stat24h">—</strong><small>Operational reports</small></article>
       <article class="card stat"><span>Sites</span><strong id="statSites">—</strong><small>Unique locations</small></article>
-      <article class="card stat"><span>Clients</span><strong id="statClients">—</strong><small>Mapped from site</small></article>
-      <article class="card stat"><span>Managers</span><strong id="statManagers">—</strong><small>Matched from Talos CMS</small></article>
       <article class="card stat"><span>PDFs available</span><strong id="statPdf">—</strong><small>Approved reports</small></article>
     </section>
 
@@ -66,7 +126,15 @@
     <div class="filter"><label for="subTypeFilter">Subtype</label><select id="subTypeFilter"><option value="all">All subtypes</option></select></div>
   </div><div class="resultline"><span id="resultCount"></span><button class="btn secondary" id="clearFilters" type="button">Clear filters</button></div></section>
 
-  <section class="insights"><article class="card insight"><h3>Top incident types</h3><div class="bars" id="typeBars"></div></article><article class="card insight"><h3>Top sites</h3><div class="bars" id="siteBars"></div></article></section>
+  <section class="overview-toggle">
+    <details class="card overview-panel" id="managementOverview">
+      <summary>
+        <div class="overview-title"><strong>Management overview</strong><span>Top incident types and busiest sites for the current filter selection.</span></div>
+        <span class="overview-chevron">⌄</span>
+      </summary>
+      <div class="insights"><article class="card insight"><h3>Top incident types</h3><div class="bars" id="typeBars"></div></article><article class="card insight"><h3>Top sites</h3><div class="bars" id="siteBars"></div></article></div>
+    </details>
+  </section>
 
   <section class="card tablewrap"><table><thead><tr><th>Created</th><th>Site</th><th>Officer</th><th>Type</th><th>Subtype</th><th>Overview / Statement</th><th>Incident Ref</th><th>PDF</th><th></th></tr></thead><tbody id="incidentRows"></tbody></table><div class="empty hidden" id="emptyState">No incidents match the current filters.</div></section>
 </div>
@@ -79,6 +147,7 @@
   </div>
   <div class="modalbody">
     <div class="test-banner hidden" id="testBanner"><strong>TEST RECORD — IGNORE</strong><span>This submission remains visible for system testing but is excluded from operational statistics.</span></div>
+    <div class="test-banner hidden" id="alertBanner"><strong id="alertBannerTitle">Operational flag</strong><span id="alertBannerText">Highlighted incident category.</span></div>
     <div class="meta-grid">
       <div class="meta-card"><span>Incident ref</span><strong id="modalRef"></strong></div>
       <div class="meta-card"><span>Created</span><strong id="modalCreated"></strong></div>
@@ -180,6 +249,10 @@ function formatIncidentTime(v){const d=parseDate(v);if(!d)return normaliseSpace(
 function richTextToPlain(v){return String(v??"").replace(/<br\s*\/?>/gi,"\n").replace(/<\/p>/gi,"\n").replace(/<li>/gi,"• ").replace(/<\/li>/gi,"\n").replace(/<[^>]+>/g,"").replace(/\*\*/g,"").replace(/&nbsp;/gi," ").replace(/&amp;/gi,"&").replace(/&lt;/gi,"<").replace(/&gt;/gi,">").replace(/\n{3,}/g,"\n\n").trim()}
 function clientFromSite(site){const s=normaliseSpace(site);if(!s)return "";for(const [rule,name] of CLIENT_RULES){if(rule.test(s))return name}return "Other / Unmapped"}
 function isTestOfficer(name){return normaliseKey(name)==="tester mctest"}
+function isCrimeIncident(x){return normaliseKey(x.incidentType)==="crime"}
+function isWarningIncident(x){const type=normaliseKey(x.incidentType),sub=normaliseKey(x.subType);return type==="physical security issues"||sub.includes("suspicious")}
+function rowStateClass(x){if(x.isTest)return "test-row";if(isCrimeIncident(x))return "crime-row";if(isWarningIncident(x))return "warn-row";return ""}
+function rowFlagBadge(x){if(x.isTest)return '<span class="test-badge">TEST — IGNORE</span>';if(isCrimeIncident(x))return '<span class="crime-badge">CRIME</span>';if(isWarningIncident(x))return '<span class="warn-badge">CHECK</span>';return ""}
 function incidentRef(x){return x.jotformId||"Legacy — no Jotform ref"}
 function buildPdfUrl(x){
   if(x.pdfUrl)return x.pdfUrl;
@@ -297,13 +370,13 @@ function rowHtml(x){
   const typeClass=normaliseKey(x.incidentType)==="site work"?"typepill sitework":"typepill";
   const preview=x.aiOverview||x.aiStatement||x.originalStatement||"No narrative recorded.";
   const pdfReady=Boolean(buildPdfUrl(x));
-  return `<tr class="${x.isTest?"test-row":""}">
+  return `<tr class="${rowStateClass(x)}">
     <td>${escapeHtml(formatDateTimeUK(x.created))}</td>
-    <td><span class="incident-title">${escapeHtml(x.site||"—")}</span><span class="sub">${escapeHtml(x.client||"Other / Unmapped")}</span>${x.isTest?'<span class="test-badge">TEST — IGNORE</span>':""}</td>
+    <td><span class="incident-title">${escapeHtml(x.site||"—")}</span><span class="sub">${escapeHtml(x.client||"Other / Unmapped")}</span>${rowFlagBadge(x)}</td>
     <td>${escapeHtml(x.officer||"—")}</td>
     <td><span class="${typeClass}">${escapeHtml(x.incidentType||"—")}</span></td>
     <td>${escapeHtml(x.subType||"—")}</td>
-    <td class="statement">${escapeHtml(truncate(preview))}</td>
+    <td class="statement">${escapeHtml(truncate(preview,155))}</td>
     <td class="refmono">${escapeHtml(incidentRef(x))}</td>
     <td><span class="pdf-pill ${pdfReady?"ready":"none"}">${pdfReady?"PDF ready":"No PDF"}</span></td>
     <td><button class="btn secondary detailsbtn" data-id="${escapeHtml(x.sharepointId)}">View</button></td>
@@ -315,8 +388,6 @@ function renderStats(list){
   animateNumber(el("statTotal"),operational.length);
   animateNumber(el("stat24h"),operational.filter(x=>(parseDate(x.created)?.getTime()||0)>=d24).length);
   animateNumber(el("statSites"),uniqueSorted(operational.map(x=>x.site)).length);
-  animateNumber(el("statClients"),uniqueSorted(operational.map(x=>x.client).filter(x=>x!=="Other / Unmapped")).length);
-  animateNumber(el("statManagers"),uniqueSorted(operational.map(x=>x.manager)).length);
   animateNumber(el("statPdf"),operational.filter(x=>Boolean(buildPdfUrl(x))).length);
 }
 function renderBars(id,list,keyFn){
@@ -341,6 +412,16 @@ function openIncident(id){
   el("modalAiStatement").textContent=x.aiStatement||"No formatted AI statement is recorded for this incident.";
   el("modalOriginal").textContent=x.originalStatement||"No original officer statement is recorded.";
   el("testBanner").classList.toggle("hidden",!x.isTest);
+  const alertBanner=el("alertBanner"),alertBannerTitle=el("alertBannerTitle"),alertBannerText=el("alertBannerText");
+  if(!x.isTest && isCrimeIncident(x)){
+    alertBanner.classList.remove("hidden");alertBanner.style.background="#fff4f4";alertBanner.style.borderColor="#efc1c1";alertBanner.style.color="#8b2d2d";
+    alertBannerTitle.textContent="Crime report";alertBannerText.textContent="This incident is highlighted as a crime report for quicker review.";
+  }else if(!x.isTest && isWarningIncident(x)){
+    alertBanner.classList.remove("hidden");alertBanner.style.background="#fff9e8";alertBanner.style.borderColor="#efd48a";alertBanner.style.color="#8c6500";
+    alertBannerTitle.textContent="Security attention required";alertBannerText.textContent="This incident has been highlighted because it is suspicious activity or a physical security issue.";
+  }else{
+    alertBanner.classList.add("hidden");
+  }
 
   const url=buildPdfUrl(x),pdf=el("pdfBtn"),download=el("pdfDownloadBtn"),status=el("pdfStatus"),note=el("pdfNote");
   if(url){
@@ -385,9 +466,6 @@ async function postJson(url,body){const response=await fetch(url,{method:"POST",
 function base64ToBytes(value){const raw=atob(value);return Uint8Array.from(raw,c=>c.charCodeAt(0))}function bytesToBase64(bytes){let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s)}
 async function deriveVerifier(pin,saltBase64){const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveBits"]);const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:base64ToBytes(saltBase64),iterations:210000,hash:"SHA-256"},material,256);return bytesToBase64(new Uint8Array(bits))}
 function generateSalt(){const bytes=new Uint8Array(16);crypto.getRandomValues(bytes);return bytesToBase64(bytes)}
-function setLoadingProgress(v,stage){loadingProgress=Math.max(0,Math.min(100,Math.round(v)));el("loadingBar").style.width=`${loadingProgress}%`;el("loadingPercent").textContent=`${loadingProgress}%`;if(stage)el("loadingStage").textContent=stage}
-function showLoading(){el("loadingOverlay").classList.remove("hidden");if(loadingTick)clearInterval(loadingTick);loadingProgress=0;setLoadingProgress(8,"Validating session");let p=8;loadingTick=setInterval(()=>{p=Math.min(94,p+Math.max(1,(94-p)*.08));setLoadingProgress(p,p<35?"Loading incident register":p<70?"Building filters and statistics":"Rendering dashboard")},350)}
-function hideLoading(){if(loadingTick){clearInterval(loadingTick);loadingTick=null}setLoadingProgress(100,"Dashboard ready");setTimeout(()=>el("loadingOverlay").classList.add("hidden"),320)}
 async function login(email,pin){const auth=window.SECURIT_AUTH||{};if(!auth.getSalt||!auth.login)throw new Error("Authentication endpoints are not configured.");const saltResult=await postJson(auth.getSalt,{email});if(!saltResult.data?.success||!saltResult.data?.salt)throw new Error("Invalid email or PIN.");const verifier=await deriveVerifier(pin,saltResult.data.salt);const loginResult=await postJson(auth.login,{email,verifier});if(!loginResult.response.ok||!loginResult.data?.success)throw new Error(loginResult.data?.message||"Invalid email or PIN.");authState={email,token:loginResult.data.token,displayName:loginResult.data.displayName||""};saveAuth();if(boolValue(loginResult.data.mustChangePassword)){showChangePin();return false}showApp();await loadData();return true}
 async function changePin(newPin){const auth=window.SECURIT_AUTH||{};const newSalt=generateSalt(),newVerifier=await deriveVerifier(newPin,newSalt);const result=await postJson(auth.changePin,{email:authState.email,token:authState.token,newSalt,newVerifier});if(!result.response.ok||!result.data?.success)throw new Error(result.data?.message||"PIN could not be updated.");showApp();await loadData()}
 async function validateStoredSession(){const stored=getStoredAuth();if(!stored){showLogin();return}authState={email:stored.email,token:stored.token,displayName:stored.displayName||""};const auth=window.SECURIT_AUTH||{};if(!auth.validate){clearAuth();showLogin("Authentication is not configured.");return}try{const result=await postJson(auth.validate,{email:authState.email,token:authState.token});if(!result.response.ok||!result.data?.success)throw new Error("Session invalid or expired.");authState.displayName=result.data.displayName||authState.displayName;saveAuth();if(boolValue(result.data.mustChangePassword)){showChangePin();return}showApp();await loadData()}catch(err){clearAuth();showLogin("Your session has expired. Please sign in again.")}}
